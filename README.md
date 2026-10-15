@@ -349,3 +349,34 @@ network/ systemd/      流量与 systemd（含筛选）
 filesystem/            文件系统容量（statfs）
 smart/                 可选模块（默认关闭）
 ```
+
+## Grafana 面板
+
+面板标题 **机群主机监控**（uid `host-monitor`，15 块）。`grafana/` 下两份是同一套面板，粘的地方不同：
+
+| 文件 | 用在哪 |
+| --- | --- |
+| `grafana/dashboard.json` | Dashboards → New → **Import**（v1，Grafana 会自动迁移成 v2） |
+| `grafana/dashboard-v2.json` | Dashboard settings → **JSON Model**（v2，Grafana 13 的编辑器只认这个格式） |
+
+导入时把 `DS_PROMETHEUS` 绑到自己的 Prometheus 数据源。面板清单：
+
+| # | 面板 | 类型 | PromQL |
+| --- | --- | --- | --- |
+| 1 | 在线主机 | stat | `count(up{job="node_exporter"})` |
+| 2 | 离线目标 | stat | `sum(up{job=~"node_exporter\|zfs_exporter\|lxc_exporter\|bird_exporter\|portfwd_exporter"} == 0) or vector(0)` |
+| 3 | 失败的服务单元 | stat | `sum(node_systemd_units_failed{instance=~"$instance"})` |
+| 4 | 采集目标状态 | table | `up{job=~"node_exporter\|zfs_exporter\|lxc_exporter\|bird_exporter\|portfwd_exporter"}` |
+| 5 | 系统负载（1 分钟） | timeseries | `node_load1{instance=~"$instance"}` |
+| 15 | 每核负载（1 / 5 / 15 分钟） | timeseries | `node_load_per_core_ratio{interval="1m",instance=~"$instance"}<br>node_load_per_core_ratio{interval="5m",instance=~"$instance"}<br>node_load_per_core_ratio{interval="15m",instance=~"$instance"}` |
+| 6 | CPU 使用率 | timeseries | `(1 - rate(node_cpu_seconds_total{cpu="total",mode="idle",instance=~"$instance"}[$__rate_interval])) * 100` |
+| 7 | 内存使用率 | timeseries | `node_memory_used_percent{instance=~"$instance"}` |
+| 8 | 内存明细 | timeseries | `node_memory_used_bytes{instance=~"$instance"}<br>node_memory_cached_bytes{instance=~"$instance"}<br>node_memory_buffers_bytes{instance=~"$instance"}` |
+| 9 | 磁盘使用率 > 60% | table | `node_filesystem_used_percent{instance=~"$instance"} > 60` |
+| 10 | 磁盘可用空间 | timeseries | `node_filesystem_avail_bytes{instance=~"$instance",mountpoint!~"/boot/efi\|/var/tmp\|/run.*"}` |
+| 11 | 网卡流量 | timeseries | `sum by (instance) (rate(node_network_receive_bytes_total{instance=~"$instance"}[$__rate_interval]))<br>sum by (instance) (rate(node_network_transmit_bytes_total{instance=~"$instance"}[$__rate_interval]))` |
+| 12 | 温度 | timeseries | `node_hwmon_temp_celsius{instance=~"$instance"}<br>node_thermal_zone_temp_celsius{instance=~"$instance"}` |
+| 13 | 失败的服务单元明细 | table | `node_systemd_unit_state{state="failed",instance=~"$instance"} == 1` |
+| 14 | 硬盘 SMART | table | `node_disk_smart_health<br>node_disk_smart_temperature_celsius<br>node_disk_smart_current_pending_sectors_total<br>node_disk_smart_power_on_hours_total` |
+
+变量：DS_PROMETHEUS、instance。

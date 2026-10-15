@@ -1,0 +1,2415 @@
+{
+ "kind": "Dashboard",
+ "apiVersion": "dashboard.grafana.app/v2",
+ "metadata": {},
+ "spec": {
+  "annotations": [
+   {
+    "kind": "AnnotationQuery",
+    "spec": {
+     "query": {
+      "kind": "DataQuery",
+      "group": "grafana",
+      "version": "v0",
+      "datasource": {
+       "name": "-- Grafana --"
+      },
+      "spec": {}
+     },
+     "enable": true,
+     "hide": true,
+     "iconColor": "rgba(0, 211, 255, 1)",
+     "name": "Annotations & Alerts",
+     "builtIn": true
+    }
+   }
+  ],
+  "cursorSync": "Crosshair",
+  "editable": true,
+  "elements": {
+   "panel-1": {
+    "kind": "Panel",
+    "spec": {
+     "id": 1,
+     "title": "在线主机",
+     "description": "",
+     "links": [],
+     "data": {
+      "kind": "QueryGroup",
+      "spec": {
+       "queries": [
+        {
+         "kind": "PanelQuery",
+         "spec": {
+          "query": {
+           "kind": "DataQuery",
+           "group": "prometheus",
+           "version": "v0",
+           "datasource": {
+            "name": "${DS_PROMETHEUS}"
+           },
+           "spec": {
+            "editorMode": "code",
+            "expr": "count(up{job=\"node_exporter\"})",
+            "legendFormat": "在线主机",
+            "range": true
+           }
+          },
+          "refId": "A",
+          "hidden": false
+         }
+        }
+       ],
+       "transformations": [],
+       "queryOptions": {}
+      }
+     },
+     "vizConfig": {
+      "kind": "VizConfig",
+      "group": "stat",
+      "version": "13.2.2",
+      "spec": {
+       "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+         "calcs": [
+          "lastNotNull"
+         ],
+         "fields": "",
+         "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+       },
+       "fieldConfig": {
+        "defaults": {
+         "mappings": [],
+         "thresholds": {
+          "mode": "absolute",
+          "steps": [
+           {
+            "value": 0,
+            "color": "red"
+           },
+           {
+            "value": 1,
+            "color": "green"
+           }
+          ]
+         },
+         "color": {
+          "mode": "thresholds"
+         },
+         "unit": "short"
+        },
+        "overrides": []
+       }
+      }
+     }
+    }
+   },
+   "panel-2": {
+    "kind": "Panel",
+    "spec": {
+     "id": 2,
+     "title": "离线目标",
+     "description": "所有 job（含 BGP / 抓包）里 health != up 的目标数，>0 要查。",
+     "links": [],
+     "data": {
+      "kind": "QueryGroup",
+      "spec": {
+       "queries": [
+        {
+         "kind": "PanelQuery",
+         "spec": {
+          "query": {
+           "kind": "DataQuery",
+           "group": "prometheus",
+           "version": "v0",
+           "datasource": {
+            "name": "${DS_PROMETHEUS}"
+           },
+           "spec": {
+            "editorMode": "code",
+            "expr": "sum(up{job=~\"node_exporter|zfs_exporter|lxc_exporter|bird_exporter|portfwd_exporter\"} == 0) or vector(0)",
+            "legendFormat": "离线目标",
+            "range": true
+           }
+          },
+          "refId": "A",
+          "hidden": false
+         }
+        }
+       ],
+       "transformations": [],
+       "queryOptions": {}
+      }
+     },
+     "vizConfig": {
+      "kind": "VizConfig",
+      "group": "stat",
+      "version": "13.2.2",
+      "spec": {
+       "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+         "calcs": [
+          "lastNotNull"
+         ],
+         "fields": "",
+         "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+       },
+       "fieldConfig": {
+        "defaults": {
+         "mappings": [],
+         "thresholds": {
+          "mode": "absolute",
+          "steps": [
+           {
+            "value": 0,
+            "color": "red"
+           },
+           {
+            "value": 1,
+            "color": "green"
+           }
+          ]
+         },
+         "color": {
+          "mode": "thresholds"
+         },
+         "unit": "short"
+        },
+        "overrides": []
+       }
+      }
+     }
+    }
+   },
+   "panel-3": {
+    "kind": "Panel",
+    "spec": {
+     "id": 3,
+     "title": "失败的服务单元",
+     "description": "systemd 处于 failed 状态的 unit 总数（只看 -systemd.include 命中的服务）。",
+     "links": [],
+     "data": {
+      "kind": "QueryGroup",
+      "spec": {
+       "queries": [
+        {
+         "kind": "PanelQuery",
+         "spec": {
+          "query": {
+           "kind": "DataQuery",
+           "group": "prometheus",
+           "version": "v0",
+           "datasource": {
+            "name": "${DS_PROMETHEUS}"
+           },
+           "spec": {
+            "editorMode": "code",
+            "expr": "sum(node_systemd_units_failed{instance=~\"$instance\"})",
+            "legendFormat": "失败单元",
+            "range": true
+           }
+          },
+          "refId": "A",
+          "hidden": false
+         }
+        }
+       ],
+       "transformations": [],
+       "queryOptions": {}
+      }
+     },
+     "vizConfig": {
+      "kind": "VizConfig",
+      "group": "stat",
+      "version": "13.2.2",
+      "spec": {
+       "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+         "calcs": [
+          "lastNotNull"
+         ],
+         "fields": "",
+         "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+       },
+       "fieldConfig": {
+        "defaults": {
+         "mappings": [],
+         "thresholds": {
+          "mode": "absolute",
+          "steps": [
+           {
+            "value": 0,
+            "color": "red"
+           },
+           {
+            "value": 1,
+            "color": "green"
+           }
+          ]
+         },
+         "color": {
+          "mode": "thresholds"
+         },
+         "unit": "short"
+        },
+        "overrides": []
+       }
+      }
+     }
+    }
+   },
+   "panel-4": {
+    "kind": "Panel",
+    "spec": {
+     "id": 4,
+     "title": "采集目标状态",
+     "description": "每台机器 × 每个采集器的抓取健康度（1=UP 0=DOWN）。",
+     "links": [],
+     "data": {
+      "kind": "QueryGroup",
+      "spec": {
+       "queries": [
+        {
+         "kind": "PanelQuery",
+         "spec": {
+          "query": {
+           "kind": "DataQuery",
+           "group": "prometheus",
+           "version": "v0",
+           "datasource": {
+            "name": "${DS_PROMETHEUS}"
+           },
+           "spec": {
+            "editorMode": "code",
+            "expr": "up{job=~\"node_exporter|zfs_exporter|lxc_exporter|bird_exporter|portfwd_exporter\"}",
+            "legendFormat": "状态",
+            "format": "table",
+            "instant": true,
+            "range": false
+           }
+          },
+          "refId": "A",
+          "hidden": false
+         }
+        }
+       ],
+       "transformations": [
+        {
+         "kind": "Transformation",
+         "group": "labelsToFields",
+         "spec": {
+          "options": {
+           "mode": "columns"
+          }
+         }
+        },
+        {
+         "kind": "Transformation",
+         "group": "merge",
+         "spec": {
+          "options": {}
+         }
+        },
+        {
+         "kind": "Transformation",
+         "group": "organize",
+         "spec": {
+          "options": {
+           "excludeByName": {
+            "Time": true
+           },
+           "renameByName": {
+            "instance": "主机",
+            "job": "采集器",
+            "Value": "状态"
+           }
+          }
+         }
+        }
+       ],
+       "queryOptions": {}
+      }
+     },
+     "vizConfig": {
+      "kind": "VizConfig",
+      "group": "table",
+      "version": "13.2.2",
+      "spec": {
+       "options": {
+        "cellHeight": "sm",
+        "showHeader": true,
+        "sortBy": [
+         {
+          "desc": true,
+          "displayName": "本月入向"
+         }
+        ]
+       },
+       "fieldConfig": {
+        "defaults": {
+         "unit": "short",
+         "thresholds": {
+          "mode": "absolute",
+          "steps": [
+           {
+            "value": 0,
+            "color": "green"
+           }
+          ]
+         },
+         "color": {
+          "mode": "thresholds"
+         },
+         "custom": {
+          "align": "auto",
+          "cellOptions": {
+           "type": "auto"
+          },
+          "footer": {
+           "reducers": [
+            "sum"
+           ]
+          },
+          "inspect": false
+         }
+        },
+        "overrides": [
+         {
+          "matcher": {
+           "id": "byName",
+           "options": "主机"
+          },
+          "properties": [
+           {
+            "id": "unit",
+            "value": "string"
+           }
+          ]
+         },
+         {
+          "matcher": {
+           "id": "byName",
+           "options": "采集器"
+          },
+          "properties": [
+           {
+            "id": "unit",
+            "value": "string"
+           }
+          ]
+         },
+         {
+          "matcher": {
+           "id": "byName",
+           "options": "状态"
+          },
+          "properties": [
+           {
+            "id": "unit",
+            "value": "short"
+           },
+           {
+            "id": "mappings",
+            "value": [
+             {
+              "type": "value",
+              "options": {
+               "1": {
+                "text": "UP",
+                "color": "green",
+                "index": 0
+               },
+               "0": {
+                "text": "DOWN",
+                "color": "red",
+                "index": 1
+               }
+              }
+             }
+            ]
+           }
+          ]
+         }
+        ]
+       }
+      }
+     }
+    }
+   },
+   "panel-5": {
+    "kind": "Panel",
+    "spec": {
+     "id": 5,
+     "title": "系统负载（1 分钟）",
+     "description": "绝对负载。换算成「每核」看下面那块 —— 4 核机器 load 4 才算满载。",
+     "links": [],
+     "data": {
+      "kind": "QueryGroup",
+      "spec": {
+       "queries": [
+        {
+         "kind": "PanelQuery",
+         "spec": {
+          "query": {
+           "kind": "DataQuery",
+           "group": "prometheus",
+           "version": "v0",
+           "datasource": {
+            "name": "${DS_PROMETHEUS}"
+           },
+           "spec": {
+            "editorMode": "code",
+            "expr": "node_load1{instance=~\"$instance\"}",
+            "legendFormat": "{{instance}}",
+            "range": true
+           }
+          },
+          "refId": "A",
+          "hidden": false
+         }
+        }
+       ],
+       "transformations": [],
+       "queryOptions": {}
+      }
+     },
+     "vizConfig": {
+      "kind": "VizConfig",
+      "group": "timeseries",
+      "version": "13.2.2",
+      "spec": {
+       "options": {
+        "legend": {
+         "calcs": [
+          "mean",
+          "max",
+          "lastNotNull"
+         ],
+         "displayMode": "table",
+         "placement": "right",
+         "showLegend": true
+        },
+        "tooltip": {
+         "hideZeros": false,
+         "mode": "multi",
+         "sort": "desc"
+        }
+       },
+       "fieldConfig": {
+        "defaults": {
+         "unit": "short",
+         "thresholds": {
+          "mode": "absolute",
+          "steps": [
+           {
+            "value": 0,
+            "color": "green"
+           }
+          ]
+         },
+         "color": {
+          "mode": "palette-classic"
+         },
+         "custom": {
+          "axisBorderShow": false,
+          "axisCenteredZero": false,
+          "axisColorMode": "text",
+          "axisLabel": "",
+          "axisPlacement": "auto",
+          "barAlignment": 0,
+          "barWidthFactor": 0.6,
+          "drawStyle": "line",
+          "fillOpacity": 10,
+          "gradientMode": "none",
+          "hideFrom": {
+           "legend": false,
+           "tooltip": false,
+           "viz": false
+          },
+          "insertNulls": false,
+          "lineInterpolation": "linear",
+          "lineWidth": 1,
+          "pointSize": 5,
+          "scaleDistribution": {
+           "type": "linear"
+          },
+          "showPoints": "never",
+          "showValues": false,
+          "spanNulls": false,
+          "stacking": {
+           "group": "A",
+           "mode": "none"
+          },
+          "thresholdsStyle": {
+           "mode": "off"
+          }
+         }
+        },
+        "overrides": []
+       }
+      }
+     }
+    }
+   },
+   "panel-15": {
+    "kind": "Panel",
+    "spec": {
+     "id": 15,
+     "title": "每核负载（1 / 5 / 15 分钟）",
+     "description": "负载 / CPU 核数，> 1 表示有任务在排队。",
+     "links": [],
+     "data": {
+      "kind": "QueryGroup",
+      "spec": {
+       "queries": [
+        {
+         "kind": "PanelQuery",
+         "spec": {
+          "query": {
+           "kind": "DataQuery",
+           "group": "prometheus",
+           "version": "v0",
+           "datasource": {
+            "name": "${DS_PROMETHEUS}"
+           },
+           "spec": {
+            "editorMode": "code",
+            "expr": "node_load_per_core_ratio{interval=\"1m\",instance=~\"$instance\"}",
+            "legendFormat": "{{instance}} 1m",
+            "range": true
+           }
+          },
+          "refId": "A",
+          "hidden": false
+         }
+        },
+        {
+         "kind": "PanelQuery",
+         "spec": {
+          "query": {
+           "kind": "DataQuery",
+           "group": "prometheus",
+           "version": "v0",
+           "datasource": {
+            "name": "${DS_PROMETHEUS}"
+           },
+           "spec": {
+            "editorMode": "code",
+            "expr": "node_load_per_core_ratio{interval=\"5m\",instance=~\"$instance\"}",
+            "legendFormat": "{{instance}} 5m",
+            "range": true
+           }
+          },
+          "refId": "B",
+          "hidden": false
+         }
+        },
+        {
+         "kind": "PanelQuery",
+         "spec": {
+          "query": {
+           "kind": "DataQuery",
+           "group": "prometheus",
+           "version": "v0",
+           "datasource": {
+            "name": "${DS_PROMETHEUS}"
+           },
+           "spec": {
+            "editorMode": "code",
+            "expr": "node_load_per_core_ratio{interval=\"15m\",instance=~\"$instance\"}",
+            "legendFormat": "{{instance}} 15m",
+            "range": true
+           }
+          },
+          "refId": "C",
+          "hidden": false
+         }
+        }
+       ],
+       "transformations": [],
+       "queryOptions": {}
+      }
+     },
+     "vizConfig": {
+      "kind": "VizConfig",
+      "group": "timeseries",
+      "version": "13.2.2",
+      "spec": {
+       "options": {
+        "legend": {
+         "calcs": [
+          "mean",
+          "max",
+          "lastNotNull"
+         ],
+         "displayMode": "table",
+         "placement": "right",
+         "showLegend": true
+        },
+        "tooltip": {
+         "hideZeros": false,
+         "mode": "multi",
+         "sort": "desc"
+        }
+       },
+       "fieldConfig": {
+        "defaults": {
+         "unit": "short",
+         "thresholds": {
+          "mode": "absolute",
+          "steps": [
+           {
+            "value": 0,
+            "color": "green"
+           }
+          ]
+         },
+         "color": {
+          "mode": "palette-classic"
+         },
+         "custom": {
+          "axisBorderShow": false,
+          "axisCenteredZero": false,
+          "axisColorMode": "text",
+          "axisLabel": "",
+          "axisPlacement": "auto",
+          "barAlignment": 0,
+          "barWidthFactor": 0.6,
+          "drawStyle": "line",
+          "fillOpacity": 10,
+          "gradientMode": "none",
+          "hideFrom": {
+           "legend": false,
+           "tooltip": false,
+           "viz": false
+          },
+          "insertNulls": false,
+          "lineInterpolation": "linear",
+          "lineWidth": 1,
+          "pointSize": 5,
+          "scaleDistribution": {
+           "type": "linear"
+          },
+          "showPoints": "never",
+          "showValues": false,
+          "spanNulls": false,
+          "stacking": {
+           "group": "A",
+           "mode": "none"
+          },
+          "thresholdsStyle": {
+           "mode": "off"
+          }
+         }
+        },
+        "overrides": []
+       }
+      }
+     }
+    }
+   },
+   "panel-6": {
+    "kind": "Panel",
+    "spec": {
+     "id": 6,
+     "title": "CPU 使用率",
+     "description": "",
+     "links": [],
+     "data": {
+      "kind": "QueryGroup",
+      "spec": {
+       "queries": [
+        {
+         "kind": "PanelQuery",
+         "spec": {
+          "query": {
+           "kind": "DataQuery",
+           "group": "prometheus",
+           "version": "v0",
+           "datasource": {
+            "name": "${DS_PROMETHEUS}"
+           },
+           "spec": {
+            "editorMode": "code",
+            "expr": "(1 - rate(node_cpu_seconds_total{cpu=\"total\",mode=\"idle\",instance=~\"$instance\"}[$__rate_interval])) * 100",
+            "legendFormat": "{{instance}}",
+            "range": true
+           }
+          },
+          "refId": "A",
+          "hidden": false
+         }
+        }
+       ],
+       "transformations": [],
+       "queryOptions": {}
+      }
+     },
+     "vizConfig": {
+      "kind": "VizConfig",
+      "group": "timeseries",
+      "version": "13.2.2",
+      "spec": {
+       "options": {
+        "legend": {
+         "calcs": [
+          "mean",
+          "max",
+          "lastNotNull"
+         ],
+         "displayMode": "table",
+         "placement": "right",
+         "showLegend": true
+        },
+        "tooltip": {
+         "hideZeros": false,
+         "mode": "multi",
+         "sort": "desc"
+        }
+       },
+       "fieldConfig": {
+        "defaults": {
+         "unit": "percent",
+         "thresholds": {
+          "mode": "absolute",
+          "steps": [
+           {
+            "value": 0,
+            "color": "green"
+           }
+          ]
+         },
+         "color": {
+          "mode": "palette-classic"
+         },
+         "custom": {
+          "axisBorderShow": false,
+          "axisCenteredZero": false,
+          "axisColorMode": "text",
+          "axisLabel": "",
+          "axisPlacement": "auto",
+          "barAlignment": 0,
+          "barWidthFactor": 0.6,
+          "drawStyle": "line",
+          "fillOpacity": 10,
+          "gradientMode": "none",
+          "hideFrom": {
+           "legend": false,
+           "tooltip": false,
+           "viz": false
+          },
+          "insertNulls": false,
+          "lineInterpolation": "linear",
+          "lineWidth": 1,
+          "pointSize": 5,
+          "scaleDistribution": {
+           "type": "linear"
+          },
+          "showPoints": "never",
+          "showValues": false,
+          "spanNulls": false,
+          "stacking": {
+           "group": "A",
+           "mode": "none"
+          },
+          "thresholdsStyle": {
+           "mode": "off"
+          }
+         }
+        },
+        "overrides": []
+       }
+      }
+     }
+    }
+   },
+   "panel-7": {
+    "kind": "Panel",
+    "spec": {
+     "id": 7,
+     "title": "内存使用率",
+     "description": "容器（hk / cowtw）没有 lxcfs 时读到的是宿主值 —— 见 PLAN.md「容器里读到的 CPU/内存是宿主值」。",
+     "links": [],
+     "data": {
+      "kind": "QueryGroup",
+      "spec": {
+       "queries": [
+        {
+         "kind": "PanelQuery",
+         "spec": {
+          "query": {
+           "kind": "DataQuery",
+           "group": "prometheus",
+           "version": "v0",
+           "datasource": {
+            "name": "${DS_PROMETHEUS}"
+           },
+           "spec": {
+            "editorMode": "code",
+            "expr": "node_memory_used_percent{instance=~\"$instance\"}",
+            "legendFormat": "{{instance}}",
+            "range": true
+           }
+          },
+          "refId": "A",
+          "hidden": false
+         }
+        }
+       ],
+       "transformations": [],
+       "queryOptions": {}
+      }
+     },
+     "vizConfig": {
+      "kind": "VizConfig",
+      "group": "timeseries",
+      "version": "13.2.2",
+      "spec": {
+       "options": {
+        "legend": {
+         "calcs": [
+          "mean",
+          "max",
+          "lastNotNull"
+         ],
+         "displayMode": "table",
+         "placement": "right",
+         "showLegend": true
+        },
+        "tooltip": {
+         "hideZeros": false,
+         "mode": "multi",
+         "sort": "desc"
+        }
+       },
+       "fieldConfig": {
+        "defaults": {
+         "unit": "percent",
+         "thresholds": {
+          "mode": "absolute",
+          "steps": [
+           {
+            "value": 0,
+            "color": "green"
+           }
+          ]
+         },
+         "color": {
+          "mode": "palette-classic"
+         },
+         "custom": {
+          "axisBorderShow": false,
+          "axisCenteredZero": false,
+          "axisColorMode": "text",
+          "axisLabel": "",
+          "axisPlacement": "auto",
+          "barAlignment": 0,
+          "barWidthFactor": 0.6,
+          "drawStyle": "line",
+          "fillOpacity": 10,
+          "gradientMode": "none",
+          "hideFrom": {
+           "legend": false,
+           "tooltip": false,
+           "viz": false
+          },
+          "insertNulls": false,
+          "lineInterpolation": "linear",
+          "lineWidth": 1,
+          "pointSize": 5,
+          "scaleDistribution": {
+           "type": "linear"
+          },
+          "showPoints": "never",
+          "showValues": false,
+          "spanNulls": false,
+          "stacking": {
+           "group": "A",
+           "mode": "none"
+          },
+          "thresholdsStyle": {
+           "mode": "off"
+          }
+         }
+        },
+        "overrides": []
+       }
+      }
+     }
+    }
+   },
+   "panel-8": {
+    "kind": "Panel",
+    "spec": {
+     "id": 8,
+     "title": "内存明细",
+     "description": "",
+     "links": [],
+     "data": {
+      "kind": "QueryGroup",
+      "spec": {
+       "queries": [
+        {
+         "kind": "PanelQuery",
+         "spec": {
+          "query": {
+           "kind": "DataQuery",
+           "group": "prometheus",
+           "version": "v0",
+           "datasource": {
+            "name": "${DS_PROMETHEUS}"
+           },
+           "spec": {
+            "editorMode": "code",
+            "expr": "node_memory_used_bytes{instance=~\"$instance\"}",
+            "legendFormat": "{{instance}} used",
+            "range": true
+           }
+          },
+          "refId": "A",
+          "hidden": false
+         }
+        },
+        {
+         "kind": "PanelQuery",
+         "spec": {
+          "query": {
+           "kind": "DataQuery",
+           "group": "prometheus",
+           "version": "v0",
+           "datasource": {
+            "name": "${DS_PROMETHEUS}"
+           },
+           "spec": {
+            "editorMode": "code",
+            "expr": "node_memory_cached_bytes{instance=~\"$instance\"}",
+            "legendFormat": "{{instance}} cached",
+            "range": true
+           }
+          },
+          "refId": "B",
+          "hidden": false
+         }
+        },
+        {
+         "kind": "PanelQuery",
+         "spec": {
+          "query": {
+           "kind": "DataQuery",
+           "group": "prometheus",
+           "version": "v0",
+           "datasource": {
+            "name": "${DS_PROMETHEUS}"
+           },
+           "spec": {
+            "editorMode": "code",
+            "expr": "node_memory_buffers_bytes{instance=~\"$instance\"}",
+            "legendFormat": "{{instance}} buffers",
+            "range": true
+           }
+          },
+          "refId": "C",
+          "hidden": false
+         }
+        }
+       ],
+       "transformations": [],
+       "queryOptions": {}
+      }
+     },
+     "vizConfig": {
+      "kind": "VizConfig",
+      "group": "timeseries",
+      "version": "13.2.2",
+      "spec": {
+       "options": {
+        "legend": {
+         "calcs": [
+          "mean",
+          "max",
+          "lastNotNull"
+         ],
+         "displayMode": "table",
+         "placement": "right",
+         "showLegend": true
+        },
+        "tooltip": {
+         "hideZeros": false,
+         "mode": "multi",
+         "sort": "desc"
+        }
+       },
+       "fieldConfig": {
+        "defaults": {
+         "unit": "bytes",
+         "thresholds": {
+          "mode": "absolute",
+          "steps": [
+           {
+            "value": 0,
+            "color": "green"
+           }
+          ]
+         },
+         "color": {
+          "mode": "palette-classic"
+         },
+         "custom": {
+          "axisBorderShow": false,
+          "axisCenteredZero": false,
+          "axisColorMode": "text",
+          "axisLabel": "",
+          "axisPlacement": "auto",
+          "barAlignment": 0,
+          "barWidthFactor": 0.6,
+          "drawStyle": "line",
+          "fillOpacity": 10,
+          "gradientMode": "none",
+          "hideFrom": {
+           "legend": false,
+           "tooltip": false,
+           "viz": false
+          },
+          "insertNulls": false,
+          "lineInterpolation": "linear",
+          "lineWidth": 1,
+          "pointSize": 5,
+          "scaleDistribution": {
+           "type": "linear"
+          },
+          "showPoints": "never",
+          "showValues": false,
+          "spanNulls": false,
+          "stacking": {
+           "group": "A",
+           "mode": "normal"
+          },
+          "thresholdsStyle": {
+           "mode": "off"
+          }
+         }
+        },
+        "overrides": []
+       }
+      }
+     }
+    }
+   },
+   "panel-9": {
+    "kind": "Panel",
+    "spec": {
+     "id": 9,
+     "title": "磁盘使用率 > 60%",
+     "description": "阈值 60%，调表达式里的数字即可改。",
+     "links": [],
+     "data": {
+      "kind": "QueryGroup",
+      "spec": {
+       "queries": [
+        {
+         "kind": "PanelQuery",
+         "spec": {
+          "query": {
+           "kind": "DataQuery",
+           "group": "prometheus",
+           "version": "v0",
+           "datasource": {
+            "name": "${DS_PROMETHEUS}"
+           },
+           "spec": {
+            "editorMode": "code",
+            "expr": "node_filesystem_used_percent{instance=~\"$instance\"} > 60",
+            "legendFormat": "使用率",
+            "format": "table",
+            "instant": true,
+            "range": false
+           }
+          },
+          "refId": "A",
+          "hidden": false
+         }
+        }
+       ],
+       "transformations": [
+        {
+         "kind": "Transformation",
+         "group": "labelsToFields",
+         "spec": {
+          "options": {
+           "mode": "columns"
+          }
+         }
+        },
+        {
+         "kind": "Transformation",
+         "group": "merge",
+         "spec": {
+          "options": {}
+         }
+        },
+        {
+         "kind": "Transformation",
+         "group": "organize",
+         "spec": {
+          "options": {
+           "excludeByName": {
+            "Time": true
+           },
+           "renameByName": {
+            "instance": "主机",
+            "mountpoint": "挂载点",
+            "device": "设备",
+            "fstype": "类型",
+            "Value": "使用率"
+           }
+          }
+         }
+        }
+       ],
+       "queryOptions": {}
+      }
+     },
+     "vizConfig": {
+      "kind": "VizConfig",
+      "group": "table",
+      "version": "13.2.2",
+      "spec": {
+       "options": {
+        "cellHeight": "sm",
+        "showHeader": true,
+        "sortBy": [
+         {
+          "desc": true,
+          "displayName": "本月入向"
+         }
+        ]
+       },
+       "fieldConfig": {
+        "defaults": {
+         "unit": "short",
+         "thresholds": {
+          "mode": "absolute",
+          "steps": [
+           {
+            "value": 0,
+            "color": "green"
+           }
+          ]
+         },
+         "color": {
+          "mode": "thresholds"
+         },
+         "custom": {
+          "align": "auto",
+          "cellOptions": {
+           "type": "auto"
+          },
+          "footer": {
+           "reducers": [
+            "sum"
+           ]
+          },
+          "inspect": false
+         }
+        },
+        "overrides": [
+         {
+          "matcher": {
+           "id": "byName",
+           "options": "主机"
+          },
+          "properties": [
+           {
+            "id": "unit",
+            "value": "string"
+           }
+          ]
+         },
+         {
+          "matcher": {
+           "id": "byName",
+           "options": "挂载点"
+          },
+          "properties": [
+           {
+            "id": "unit",
+            "value": "string"
+           }
+          ]
+         },
+         {
+          "matcher": {
+           "id": "byName",
+           "options": "设备"
+          },
+          "properties": [
+           {
+            "id": "unit",
+            "value": "string"
+           }
+          ]
+         },
+         {
+          "matcher": {
+           "id": "byName",
+           "options": "类型"
+          },
+          "properties": [
+           {
+            "id": "unit",
+            "value": "string"
+           }
+          ]
+         },
+         {
+          "matcher": {
+           "id": "byName",
+           "options": "使用率"
+          },
+          "properties": [
+           {
+            "id": "unit",
+            "value": "percent"
+           }
+          ]
+         }
+        ]
+       }
+      }
+     }
+    }
+   },
+   "panel-10": {
+    "kind": "Panel",
+    "spec": {
+     "id": 10,
+     "title": "磁盘可用空间",
+     "description": "",
+     "links": [],
+     "data": {
+      "kind": "QueryGroup",
+      "spec": {
+       "queries": [
+        {
+         "kind": "PanelQuery",
+         "spec": {
+          "query": {
+           "kind": "DataQuery",
+           "group": "prometheus",
+           "version": "v0",
+           "datasource": {
+            "name": "${DS_PROMETHEUS}"
+           },
+           "spec": {
+            "editorMode": "code",
+            "expr": "node_filesystem_avail_bytes{instance=~\"$instance\",mountpoint!~\"/boot/efi|/var/tmp|/run.*\"}",
+            "legendFormat": "{{instance}} {{mountpoint}}",
+            "range": true
+           }
+          },
+          "refId": "A",
+          "hidden": false
+         }
+        }
+       ],
+       "transformations": [],
+       "queryOptions": {}
+      }
+     },
+     "vizConfig": {
+      "kind": "VizConfig",
+      "group": "timeseries",
+      "version": "13.2.2",
+      "spec": {
+       "options": {
+        "legend": {
+         "calcs": [
+          "mean",
+          "max",
+          "lastNotNull"
+         ],
+         "displayMode": "table",
+         "placement": "right",
+         "showLegend": true
+        },
+        "tooltip": {
+         "hideZeros": false,
+         "mode": "multi",
+         "sort": "desc"
+        }
+       },
+       "fieldConfig": {
+        "defaults": {
+         "unit": "bytes",
+         "thresholds": {
+          "mode": "absolute",
+          "steps": [
+           {
+            "value": 0,
+            "color": "green"
+           }
+          ]
+         },
+         "color": {
+          "mode": "palette-classic"
+         },
+         "custom": {
+          "axisBorderShow": false,
+          "axisCenteredZero": false,
+          "axisColorMode": "text",
+          "axisLabel": "",
+          "axisPlacement": "auto",
+          "barAlignment": 0,
+          "barWidthFactor": 0.6,
+          "drawStyle": "line",
+          "fillOpacity": 10,
+          "gradientMode": "none",
+          "hideFrom": {
+           "legend": false,
+           "tooltip": false,
+           "viz": false
+          },
+          "insertNulls": false,
+          "lineInterpolation": "linear",
+          "lineWidth": 1,
+          "pointSize": 5,
+          "scaleDistribution": {
+           "type": "linear"
+          },
+          "showPoints": "never",
+          "showValues": false,
+          "spanNulls": false,
+          "stacking": {
+           "group": "A",
+           "mode": "none"
+          },
+          "thresholdsStyle": {
+           "mode": "off"
+          }
+         }
+        },
+        "overrides": []
+       }
+      }
+     }
+    }
+   },
+   "panel-11": {
+    "kind": "Panel",
+    "spec": {
+     "id": 11,
+     "title": "网卡流量",
+     "description": "",
+     "links": [],
+     "data": {
+      "kind": "QueryGroup",
+      "spec": {
+       "queries": [
+        {
+         "kind": "PanelQuery",
+         "spec": {
+          "query": {
+           "kind": "DataQuery",
+           "group": "prometheus",
+           "version": "v0",
+           "datasource": {
+            "name": "${DS_PROMETHEUS}"
+           },
+           "spec": {
+            "editorMode": "code",
+            "expr": "sum by (instance) (rate(node_network_receive_bytes_total{instance=~\"$instance\"}[$__rate_interval]))",
+            "legendFormat": "{{instance}} 入",
+            "range": true
+           }
+          },
+          "refId": "A",
+          "hidden": false
+         }
+        },
+        {
+         "kind": "PanelQuery",
+         "spec": {
+          "query": {
+           "kind": "DataQuery",
+           "group": "prometheus",
+           "version": "v0",
+           "datasource": {
+            "name": "${DS_PROMETHEUS}"
+           },
+           "spec": {
+            "editorMode": "code",
+            "expr": "sum by (instance) (rate(node_network_transmit_bytes_total{instance=~\"$instance\"}[$__rate_interval]))",
+            "legendFormat": "{{instance}} 出",
+            "range": true
+           }
+          },
+          "refId": "B",
+          "hidden": false
+         }
+        }
+       ],
+       "transformations": [],
+       "queryOptions": {}
+      }
+     },
+     "vizConfig": {
+      "kind": "VizConfig",
+      "group": "timeseries",
+      "version": "13.2.2",
+      "spec": {
+       "options": {
+        "legend": {
+         "calcs": [
+          "mean",
+          "max",
+          "lastNotNull"
+         ],
+         "displayMode": "table",
+         "placement": "right",
+         "showLegend": true
+        },
+        "tooltip": {
+         "hideZeros": false,
+         "mode": "multi",
+         "sort": "desc"
+        }
+       },
+       "fieldConfig": {
+        "defaults": {
+         "unit": "Bps",
+         "thresholds": {
+          "mode": "absolute",
+          "steps": [
+           {
+            "value": 0,
+            "color": "green"
+           }
+          ]
+         },
+         "color": {
+          "mode": "palette-classic"
+         },
+         "custom": {
+          "axisBorderShow": false,
+          "axisCenteredZero": false,
+          "axisColorMode": "text",
+          "axisLabel": "",
+          "axisPlacement": "auto",
+          "barAlignment": 0,
+          "barWidthFactor": 0.6,
+          "drawStyle": "line",
+          "fillOpacity": 10,
+          "gradientMode": "none",
+          "hideFrom": {
+           "legend": false,
+           "tooltip": false,
+           "viz": false
+          },
+          "insertNulls": false,
+          "lineInterpolation": "linear",
+          "lineWidth": 1,
+          "pointSize": 5,
+          "scaleDistribution": {
+           "type": "linear"
+          },
+          "showPoints": "never",
+          "showValues": false,
+          "spanNulls": false,
+          "stacking": {
+           "group": "A",
+           "mode": "none"
+          },
+          "thresholdsStyle": {
+           "mode": "off"
+          }
+         }
+        },
+        "overrides": []
+       }
+      }
+     }
+    }
+   },
+   "panel-12": {
+    "kind": "Panel",
+    "spec": {
+     "id": 12,
+     "title": "温度",
+     "description": "只有带 hwmon/thermal zone 的机器有数据（debnas、cowtw）。",
+     "links": [],
+     "data": {
+      "kind": "QueryGroup",
+      "spec": {
+       "queries": [
+        {
+         "kind": "PanelQuery",
+         "spec": {
+          "query": {
+           "kind": "DataQuery",
+           "group": "prometheus",
+           "version": "v0",
+           "datasource": {
+            "name": "${DS_PROMETHEUS}"
+           },
+           "spec": {
+            "editorMode": "code",
+            "expr": "node_hwmon_temp_celsius{instance=~\"$instance\"}",
+            "legendFormat": "{{instance}} {{chip}} {{sensor}}",
+            "range": true
+           }
+          },
+          "refId": "A",
+          "hidden": false
+         }
+        },
+        {
+         "kind": "PanelQuery",
+         "spec": {
+          "query": {
+           "kind": "DataQuery",
+           "group": "prometheus",
+           "version": "v0",
+           "datasource": {
+            "name": "${DS_PROMETHEUS}"
+           },
+           "spec": {
+            "editorMode": "code",
+            "expr": "node_thermal_zone_temp_celsius{instance=~\"$instance\"}",
+            "legendFormat": "{{instance}} {{type}}",
+            "range": true
+           }
+          },
+          "refId": "B",
+          "hidden": false
+         }
+        }
+       ],
+       "transformations": [],
+       "queryOptions": {}
+      }
+     },
+     "vizConfig": {
+      "kind": "VizConfig",
+      "group": "timeseries",
+      "version": "13.2.2",
+      "spec": {
+       "options": {
+        "legend": {
+         "calcs": [
+          "mean",
+          "max",
+          "lastNotNull"
+         ],
+         "displayMode": "table",
+         "placement": "right",
+         "showLegend": true
+        },
+        "tooltip": {
+         "hideZeros": false,
+         "mode": "multi",
+         "sort": "desc"
+        }
+       },
+       "fieldConfig": {
+        "defaults": {
+         "unit": "celsius",
+         "thresholds": {
+          "mode": "absolute",
+          "steps": [
+           {
+            "value": 0,
+            "color": "green"
+           }
+          ]
+         },
+         "color": {
+          "mode": "palette-classic"
+         },
+         "custom": {
+          "axisBorderShow": false,
+          "axisCenteredZero": false,
+          "axisColorMode": "text",
+          "axisLabel": "",
+          "axisPlacement": "auto",
+          "barAlignment": 0,
+          "barWidthFactor": 0.6,
+          "drawStyle": "line",
+          "fillOpacity": 10,
+          "gradientMode": "none",
+          "hideFrom": {
+           "legend": false,
+           "tooltip": false,
+           "viz": false
+          },
+          "insertNulls": false,
+          "lineInterpolation": "linear",
+          "lineWidth": 1,
+          "pointSize": 5,
+          "scaleDistribution": {
+           "type": "linear"
+          },
+          "showPoints": "never",
+          "showValues": false,
+          "spanNulls": false,
+          "stacking": {
+           "group": "A",
+           "mode": "none"
+          },
+          "thresholdsStyle": {
+           "mode": "off"
+          }
+         }
+        },
+        "overrides": []
+       }
+      }
+     }
+    }
+   },
+   "panel-13": {
+    "kind": "Panel",
+    "spec": {
+     "id": 13,
+     "title": "失败的服务单元明细",
+     "description": "空表 = 没有 failed 的 unit。",
+     "links": [],
+     "data": {
+      "kind": "QueryGroup",
+      "spec": {
+       "queries": [
+        {
+         "kind": "PanelQuery",
+         "spec": {
+          "query": {
+           "kind": "DataQuery",
+           "group": "prometheus",
+           "version": "v0",
+           "datasource": {
+            "name": "${DS_PROMETHEUS}"
+           },
+           "spec": {
+            "editorMode": "code",
+            "expr": "node_systemd_unit_state{state=\"failed\",instance=~\"$instance\"} == 1",
+            "legendFormat": "失败",
+            "format": "table",
+            "instant": true,
+            "range": false
+           }
+          },
+          "refId": "A",
+          "hidden": false
+         }
+        }
+       ],
+       "transformations": [
+        {
+         "kind": "Transformation",
+         "group": "labelsToFields",
+         "spec": {
+          "options": {
+           "mode": "columns"
+          }
+         }
+        },
+        {
+         "kind": "Transformation",
+         "group": "merge",
+         "spec": {
+          "options": {}
+         }
+        },
+        {
+         "kind": "Transformation",
+         "group": "organize",
+         "spec": {
+          "options": {
+           "excludeByName": {
+            "Time": true,
+            "job": true,
+            "state": true,
+            "exported_instance": true
+           },
+           "renameByName": {
+            "instance": "主机",
+            "unit": "服务",
+            "Value": "失败"
+           }
+          }
+         }
+        }
+       ],
+       "queryOptions": {}
+      }
+     },
+     "vizConfig": {
+      "kind": "VizConfig",
+      "group": "table",
+      "version": "13.2.2",
+      "spec": {
+       "options": {
+        "cellHeight": "sm",
+        "showHeader": true,
+        "sortBy": [
+         {
+          "desc": true,
+          "displayName": "本月入向"
+         }
+        ]
+       },
+       "fieldConfig": {
+        "defaults": {
+         "unit": "short",
+         "thresholds": {
+          "mode": "absolute",
+          "steps": [
+           {
+            "value": 0,
+            "color": "green"
+           }
+          ]
+         },
+         "color": {
+          "mode": "thresholds"
+         },
+         "custom": {
+          "align": "auto",
+          "cellOptions": {
+           "type": "auto"
+          },
+          "footer": {
+           "reducers": [
+            "sum"
+           ]
+          },
+          "inspect": false
+         }
+        },
+        "overrides": [
+         {
+          "matcher": {
+           "id": "byName",
+           "options": "主机"
+          },
+          "properties": [
+           {
+            "id": "unit",
+            "value": "string"
+           }
+          ]
+         },
+         {
+          "matcher": {
+           "id": "byName",
+           "options": "服务"
+          },
+          "properties": [
+           {
+            "id": "unit",
+            "value": "string"
+           }
+          ]
+         },
+         {
+          "matcher": {
+           "id": "byName",
+           "options": "失败"
+          },
+          "properties": [
+           {
+            "id": "unit",
+            "value": "short"
+           }
+          ]
+         }
+        ]
+       }
+      }
+     }
+    }
+   },
+   "panel-14": {
+    "kind": "Panel",
+    "spec": {
+     "id": 14,
+     "title": "硬盘 SMART",
+     "description": "健康 1=OK 0=异常；待映射扇区增长要查盘。只有开了 -enable-smart 的机器有数据。",
+     "links": [],
+     "data": {
+      "kind": "QueryGroup",
+      "spec": {
+       "queries": [
+        {
+         "kind": "PanelQuery",
+         "spec": {
+          "query": {
+           "kind": "DataQuery",
+           "group": "prometheus",
+           "version": "v0",
+           "datasource": {
+            "name": "${DS_PROMETHEUS}"
+           },
+           "spec": {
+            "editorMode": "code",
+            "expr": "node_disk_smart_health",
+            "legendFormat": "健康",
+            "format": "table",
+            "instant": true,
+            "range": false
+           }
+          },
+          "refId": "A",
+          "hidden": false
+         }
+        },
+        {
+         "kind": "PanelQuery",
+         "spec": {
+          "query": {
+           "kind": "DataQuery",
+           "group": "prometheus",
+           "version": "v0",
+           "datasource": {
+            "name": "${DS_PROMETHEUS}"
+           },
+           "spec": {
+            "editorMode": "code",
+            "expr": "node_disk_smart_temperature_celsius",
+            "legendFormat": "温度",
+            "format": "table",
+            "instant": true,
+            "range": false
+           }
+          },
+          "refId": "B",
+          "hidden": false
+         }
+        },
+        {
+         "kind": "PanelQuery",
+         "spec": {
+          "query": {
+           "kind": "DataQuery",
+           "group": "prometheus",
+           "version": "v0",
+           "datasource": {
+            "name": "${DS_PROMETHEUS}"
+           },
+           "spec": {
+            "editorMode": "code",
+            "expr": "node_disk_smart_current_pending_sectors_total",
+            "legendFormat": "待映射扇区",
+            "format": "table",
+            "instant": true,
+            "range": false
+           }
+          },
+          "refId": "C",
+          "hidden": false
+         }
+        },
+        {
+         "kind": "PanelQuery",
+         "spec": {
+          "query": {
+           "kind": "DataQuery",
+           "group": "prometheus",
+           "version": "v0",
+           "datasource": {
+            "name": "${DS_PROMETHEUS}"
+           },
+           "spec": {
+            "editorMode": "code",
+            "expr": "node_disk_smart_power_on_hours_total",
+            "legendFormat": "通电小时",
+            "format": "table",
+            "instant": true,
+            "range": false
+           }
+          },
+          "refId": "D",
+          "hidden": false
+         }
+        }
+       ],
+       "transformations": [
+        {
+         "kind": "Transformation",
+         "group": "labelsToFields",
+         "spec": {
+          "options": {
+           "mode": "columns"
+          }
+         }
+        },
+        {
+         "kind": "Transformation",
+         "group": "merge",
+         "spec": {
+          "options": {}
+         }
+        },
+        {
+         "kind": "Transformation",
+         "group": "organize",
+         "spec": {
+          "options": {
+           "excludeByName": {
+            "Time": true,
+            "job": true,
+            "instance": true,
+            "exported_instance": true,
+            "serial": true
+           },
+           "renameByName": {
+            "device": "设备",
+            "model": "型号",
+            "Value #A": "健康",
+            "Value #B": "温度",
+            "Value #C": "待映射扇区",
+            "Value #D": "通电小时"
+           }
+          }
+         }
+        }
+       ],
+       "queryOptions": {}
+      }
+     },
+     "vizConfig": {
+      "kind": "VizConfig",
+      "group": "table",
+      "version": "13.2.2",
+      "spec": {
+       "options": {
+        "cellHeight": "sm",
+        "showHeader": true,
+        "sortBy": [
+         {
+          "desc": true,
+          "displayName": "本月入向"
+         }
+        ]
+       },
+       "fieldConfig": {
+        "defaults": {
+         "unit": "short",
+         "thresholds": {
+          "mode": "absolute",
+          "steps": [
+           {
+            "value": 0,
+            "color": "green"
+           }
+          ]
+         },
+         "color": {
+          "mode": "thresholds"
+         },
+         "custom": {
+          "align": "auto",
+          "cellOptions": {
+           "type": "auto"
+          },
+          "footer": {
+           "reducers": [
+            "sum"
+           ]
+          },
+          "inspect": false
+         }
+        },
+        "overrides": [
+         {
+          "matcher": {
+           "id": "byName",
+           "options": "设备"
+          },
+          "properties": [
+           {
+            "id": "unit",
+            "value": "string"
+           }
+          ]
+         },
+         {
+          "matcher": {
+           "id": "byName",
+           "options": "型号"
+          },
+          "properties": [
+           {
+            "id": "unit",
+            "value": "string"
+           }
+          ]
+         },
+         {
+          "matcher": {
+           "id": "byName",
+           "options": "健康"
+          },
+          "properties": [
+           {
+            "id": "unit",
+            "value": "short"
+           }
+          ]
+         },
+         {
+          "matcher": {
+           "id": "byName",
+           "options": "温度"
+          },
+          "properties": [
+           {
+            "id": "unit",
+            "value": "celsius"
+           }
+          ]
+         },
+         {
+          "matcher": {
+           "id": "byName",
+           "options": "待映射扇区"
+          },
+          "properties": [
+           {
+            "id": "unit",
+            "value": "short"
+           }
+          ]
+         },
+         {
+          "matcher": {
+           "id": "byName",
+           "options": "通电小时"
+          },
+          "properties": [
+           {
+            "id": "unit",
+            "value": "short"
+           }
+          ]
+         }
+        ]
+       }
+      }
+     }
+    }
+   }
+  },
+  "layout": {
+   "kind": "GridLayout",
+   "spec": {
+    "items": [
+     {
+      "kind": "GridLayoutItem",
+      "spec": {
+       "x": 0,
+       "y": 0,
+       "width": 4,
+       "height": 4,
+       "element": {
+        "kind": "ElementReference",
+        "name": "panel-1"
+       }
+      }
+     },
+     {
+      "kind": "GridLayoutItem",
+      "spec": {
+       "x": 4,
+       "y": 0,
+       "width": 5,
+       "height": 4,
+       "element": {
+        "kind": "ElementReference",
+        "name": "panel-2"
+       }
+      }
+     },
+     {
+      "kind": "GridLayoutItem",
+      "spec": {
+       "x": 9,
+       "y": 0,
+       "width": 5,
+       "height": 4,
+       "element": {
+        "kind": "ElementReference",
+        "name": "panel-3"
+       }
+      }
+     },
+     {
+      "kind": "GridLayoutItem",
+      "spec": {
+       "x": 14,
+       "y": 0,
+       "width": 10,
+       "height": 8,
+       "element": {
+        "kind": "ElementReference",
+        "name": "panel-4"
+       }
+      }
+     },
+     {
+      "kind": "GridLayoutItem",
+      "spec": {
+       "x": 0,
+       "y": 8,
+       "width": 14,
+       "height": 8,
+       "element": {
+        "kind": "ElementReference",
+        "name": "panel-5"
+       }
+      }
+     },
+     {
+      "kind": "GridLayoutItem",
+      "spec": {
+       "x": 0,
+       "y": 16,
+       "width": 14,
+       "height": 8,
+       "element": {
+        "kind": "ElementReference",
+        "name": "panel-15"
+       }
+      }
+     },
+     {
+      "kind": "GridLayoutItem",
+      "spec": {
+       "x": 14,
+       "y": 16,
+       "width": 8,
+       "height": 7,
+       "element": {
+        "kind": "ElementReference",
+        "name": "panel-6"
+       }
+      }
+     },
+     {
+      "kind": "GridLayoutItem",
+      "spec": {
+       "x": 0,
+       "y": 24,
+       "width": 8,
+       "height": 7,
+       "element": {
+        "kind": "ElementReference",
+        "name": "panel-7"
+       }
+      }
+     },
+     {
+      "kind": "GridLayoutItem",
+      "spec": {
+       "x": 8,
+       "y": 24,
+       "width": 8,
+       "height": 7,
+       "element": {
+        "kind": "ElementReference",
+        "name": "panel-8"
+       }
+      }
+     },
+     {
+      "kind": "GridLayoutItem",
+      "spec": {
+       "x": 0,
+       "y": 31,
+       "width": 12,
+       "height": 7,
+       "element": {
+        "kind": "ElementReference",
+        "name": "panel-9"
+       }
+      }
+     },
+     {
+      "kind": "GridLayoutItem",
+      "spec": {
+       "x": 12,
+       "y": 31,
+       "width": 12,
+       "height": 7,
+       "element": {
+        "kind": "ElementReference",
+        "name": "panel-10"
+       }
+      }
+     },
+     {
+      "kind": "GridLayoutItem",
+      "spec": {
+       "x": 0,
+       "y": 38,
+       "width": 12,
+       "height": 7,
+       "element": {
+        "kind": "ElementReference",
+        "name": "panel-11"
+       }
+      }
+     },
+     {
+      "kind": "GridLayoutItem",
+      "spec": {
+       "x": 12,
+       "y": 38,
+       "width": 12,
+       "height": 7,
+       "element": {
+        "kind": "ElementReference",
+        "name": "panel-12"
+       }
+      }
+     },
+     {
+      "kind": "GridLayoutItem",
+      "spec": {
+       "x": 0,
+       "y": 45,
+       "width": 10,
+       "height": 7,
+       "element": {
+        "kind": "ElementReference",
+        "name": "panel-13"
+       }
+      }
+     },
+     {
+      "kind": "GridLayoutItem",
+      "spec": {
+       "x": 10,
+       "y": 45,
+       "width": 14,
+       "height": 7,
+       "element": {
+        "kind": "ElementReference",
+        "name": "panel-14"
+       }
+      }
+     }
+    ]
+   }
+  },
+  "links": [],
+  "liveNow": false,
+  "preload": false,
+  "tags": [
+   "机群",
+   "node_exporter"
+  ],
+  "timeSettings": {
+   "timezone": "browser",
+   "from": "now-6h",
+   "to": "now",
+   "autoRefresh": "30s",
+   "autoRefreshIntervals": [
+    "5s",
+    "10s",
+    "30s",
+    "1m",
+    "5m",
+    "15m",
+    "30m",
+    "1h",
+    "2h",
+    "1d"
+   ],
+   "hideTimepicker": false,
+   "fiscalYearStartMonth": 0
+  },
+  "title": "机群主机监控",
+  "variables": [
+   {
+    "kind": "DatasourceVariable",
+    "spec": {
+     "name": "DS_PROMETHEUS",
+     "pluginId": "prometheus",
+     "refresh": "onDashboardLoad",
+     "regex": "",
+     "current": {
+      "text": "prometheus",
+      "value": "afsv2mm9jz94we"
+     },
+     "options": [],
+     "multi": false,
+     "includeAll": false,
+     "label": "Prometheus",
+     "hide": "dontHide",
+     "skipUrlSync": false,
+     "allowCustomValue": true
+    }
+   },
+   {
+    "kind": "QueryVariable",
+    "spec": {
+     "name": "instance",
+     "label": "主机",
+     "hide": "dontHide",
+     "refresh": "onTimeRangeChanged",
+     "skipUrlSync": false,
+     "multi": true,
+     "includeAll": true,
+     "allValue": ".*",
+     "regex": "",
+     "regexApplyTo": "value",
+     "sort": "alphabeticalAsc",
+     "current": {
+      "text": "All",
+      "value": [
+       "$__all"
+      ]
+     },
+     "query": {
+      "kind": "DataQuery",
+      "group": "prometheus",
+      "version": "v0",
+      "datasource": {
+       "name": "${DS_PROMETHEUS}"
+      },
+      "spec": {
+       "query": "label_values(node_load1, instance)",
+       "refId": "StandardVariableQuery"
+      }
+     }
+    }
+   }
+  ]
+ }
+}
