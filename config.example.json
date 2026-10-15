@@ -33,6 +33,6 @@
 
   "filesystem_include": "",
   "filesystem_exclude": "",
-  "filesystem_fstype_exclude": "^(tmpfs|devtmpfs|devpts|overlay|squashfs|ramfs|proc|sysfs|cgroup2?|securityfs|debugfs|tracefs|pstore|bpf|configfs|fusectl|mqueue|hugetlbfs|nsfs|efivarfs|autofs|fuse\\.lxcfs|fuse\\.gvfsd-fuse)$",
+  "filesystem_fstype_exclude": "^(tmpfs|devtmpfs|devpts|overlay|squashfs|ramfs|proc|sysfs|cgroup2?|securityfs|debugfs|tracefs|pstore|bpf|configfs|fusectl|mqueue|hugetlbfs|nsfs|efivarfs|autofs|binfmt_misc|nfsd|rpc_pipefs|fuse\\.lxcfs|fuse\\.gvfsd-fuse)$",
   "filesystem_mounts_path": "/proc/mounts"
 }

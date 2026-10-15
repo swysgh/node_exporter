@@ -27,7 +27,7 @@ const namespace = "node"
 // 这些文件系统（内存文件系统、内核接口、容器 overlay 等）的容量没有监控
 // 意义，混在一起会产生大量无用的时间序列。传 -filesystem.fstype-exclude=""
 // 可关闭该默认行为。
-const DefaultFstypeExclude = `^(tmpfs|devtmpfs|devpts|overlay|squashfs|ramfs|proc|sysfs|cgroup2?|securityfs|debugfs|tracefs|pstore|bpf|configfs|fusectl|mqueue|hugetlbfs|nsfs|efivarfs|autofs|fuse\.lxcfs|fuse\.gvfsd-fuse)$`
+const DefaultFstypeExclude = `^(tmpfs|devtmpfs|devpts|overlay|squashfs|ramfs|proc|sysfs|cgroup2?|securityfs|debugfs|tracefs|pstore|bpf|configfs|fusectl|mqueue|hugetlbfs|nsfs|efivarfs|autofs|binfmt_misc|nfsd|rpc_pipefs|fuse\.lxcfs|fuse\.gvfsd-fuse)$`
 
 // Mount 是挂载表中的一行。
 type Mount struct {
