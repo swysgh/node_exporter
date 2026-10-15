@@ -140,7 +140,7 @@
       "type": "prometheus",
       "uid": "${DS_PROMETHEUS}"
      },
-     "expr": "sum(up{job=~\"node_exporter|zfs_exporter|lxc_exporter|bird_exporter|portfwd_exporter|flapalerted|flapalerted_peers\"} == 0) or vector(0)",
+     "expr": "sum(up{job=~\"node_exporter|zfs_exporter|lxc_exporter|bird_exporter|portfwd_exporter|flapalerted|flapalerted_peers\"} == bool 0) or vector(0)",
      "instant": true,
      "legendFormat": "离线目标",
      "range": false,
@@ -1850,5 +1850,5 @@
  "timezone": "browser",
  "title": "机群主机监控",
  "uid": "host-monitor",
- "version": 9
+ "version": 10
 }
