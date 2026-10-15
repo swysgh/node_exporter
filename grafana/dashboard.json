@@ -205,7 +205,7 @@
       "type": "prometheus",
       "uid": "${DS_PROMETHEUS}"
      },
-     "expr": "sum(node_systemd_units_failed{instance=~\"$instance\"})",
+     "expr": "sum(node_systemd_units_failed{instance=~\"$instance\",instance!~\"[0-9.]+:[0-9]+\"})",
      "instant": true,
      "legendFormat": "失败单元",
      "range": false,
@@ -465,7 +465,7 @@
       "type": "prometheus",
       "uid": "${DS_PROMETHEUS}"
      },
-     "expr": "node_load1{instance=~\"$instance\"}",
+     "expr": "node_load1{instance=~\"$instance\",instance!~\"[0-9.]+:[0-9]+\"}",
      "legendFormat": "{{instance}}",
      "range": true,
      "refId": "A"
@@ -566,7 +566,7 @@
       "type": "prometheus",
       "uid": "${DS_PROMETHEUS}"
      },
-     "expr": "(1 - avg by (instance) (rate(node_cpu_seconds_total{cpu!=\"total\",mode=\"idle\",instance=~\"$instance\"}[$__rate_interval]))) * 100",
+     "expr": "(1 - avg by (instance) (rate(node_cpu_seconds_total{cpu!=\"total\",mode=\"idle\",instance=~\"$instance\",instance!~\"[0-9.]+:[0-9]+\"}[$__rate_interval]))) * 100",
      "legendFormat": "{{instance}}",
      "range": true,
      "refId": "A"
@@ -667,7 +667,7 @@
       "type": "prometheus",
       "uid": "${DS_PROMETHEUS}"
      },
-     "expr": "node_memory_used_percent{instance=~\"$instance\"}",
+     "expr": "node_memory_used_percent{instance=~\"$instance\",instance!~\"[0-9.]+:[0-9]+\"}",
      "legendFormat": "{{instance}}",
      "range": true,
      "refId": "A"
@@ -767,7 +767,7 @@
       "type": "prometheus",
       "uid": "${DS_PROMETHEUS}"
      },
-     "expr": "sum by (instance) (rate(node_network_receive_bytes_total{instance=~\"$instance\"}[$__rate_interval]))",
+     "expr": "sum by (instance) (rate(node_network_receive_bytes_total{instance=~\"$instance\",instance!~\"[0-9.]+:[0-9]+\"}[$__rate_interval]))",
      "legendFormat": "{{instance}} 入",
      "range": true,
      "refId": "A"
@@ -777,7 +777,7 @@
       "type": "prometheus",
       "uid": "${DS_PROMETHEUS}"
      },
-     "expr": "sum by (instance) (rate(node_network_transmit_bytes_total{instance=~\"$instance\"}[$__rate_interval]))",
+     "expr": "sum by (instance) (rate(node_network_transmit_bytes_total{instance=~\"$instance\",instance!~\"[0-9.]+:[0-9]+\"}[$__rate_interval]))",
      "legendFormat": "{{instance}} 出",
      "range": true,
      "refId": "B"
@@ -876,7 +876,7 @@
       "type": "prometheus",
       "uid": "${DS_PROMETHEUS}"
      },
-     "expr": "node_systemd_unit_state{state=\"failed\",instance=~\"$instance\"} == 1",
+     "expr": "node_systemd_unit_state{state=\"failed\",instance=~\"$instance\",instance!~\"[0-9.]+:[0-9]+\"} == 1",
      "format": "table",
      "instant": true,
      "legendFormat": "失败",
@@ -1007,7 +1007,7 @@
       "type": "prometheus",
       "uid": "${DS_PROMETHEUS}"
      },
-     "expr": "node_memory_used_bytes{instance=~\"$instance\"}",
+     "expr": "node_memory_used_bytes{instance=~\"$instance\",instance!~\"[0-9.]+:[0-9]+\"}",
      "legendFormat": "{{instance}} used",
      "range": true,
      "refId": "A"
@@ -1017,7 +1017,7 @@
       "type": "prometheus",
       "uid": "${DS_PROMETHEUS}"
      },
-     "expr": "node_memory_cached_bytes{instance=~\"$instance\"}",
+     "expr": "node_memory_cached_bytes{instance=~\"$instance\",instance!~\"[0-9.]+:[0-9]+\"}",
      "legendFormat": "{{instance}} cached",
      "range": true,
      "refId": "B"
@@ -1027,7 +1027,7 @@
       "type": "prometheus",
       "uid": "${DS_PROMETHEUS}"
      },
-     "expr": "node_memory_buffers_bytes{instance=~\"$instance\"}",
+     "expr": "node_memory_buffers_bytes{instance=~\"$instance\",instance!~\"[0-9.]+:[0-9]+\"}",
      "legendFormat": "{{instance}} buffers",
      "range": true,
      "refId": "C"
@@ -1128,7 +1128,7 @@
       "type": "prometheus",
       "uid": "${DS_PROMETHEUS}"
      },
-     "expr": "node_load_per_core_ratio{interval=\"1m\",instance=~\"$instance\"}",
+     "expr": "node_load_per_core_ratio{interval=\"1m\",instance=~\"$instance\",instance!~\"[0-9.]+:[0-9]+\"}",
      "legendFormat": "{{instance}} 1m",
      "range": true,
      "refId": "A"
@@ -1138,7 +1138,7 @@
       "type": "prometheus",
       "uid": "${DS_PROMETHEUS}"
      },
-     "expr": "node_load_per_core_ratio{interval=\"5m\",instance=~\"$instance\"}",
+     "expr": "node_load_per_core_ratio{interval=\"5m\",instance=~\"$instance\",instance!~\"[0-9.]+:[0-9]+\"}",
      "legendFormat": "{{instance}} 5m",
      "range": true,
      "refId": "B"
@@ -1148,7 +1148,7 @@
       "type": "prometheus",
       "uid": "${DS_PROMETHEUS}"
      },
-     "expr": "node_load_per_core_ratio{interval=\"15m\",instance=~\"$instance\"}",
+     "expr": "node_load_per_core_ratio{interval=\"15m\",instance=~\"$instance\",instance!~\"[0-9.]+:[0-9]+\"}",
      "legendFormat": "{{instance}} 15m",
      "range": true,
      "refId": "C"
@@ -1248,7 +1248,7 @@
       "type": "prometheus",
       "uid": "${DS_PROMETHEUS}"
      },
-     "expr": "node_filesystem_avail_bytes{instance=~\"$instance\",mountpoint!~\"/boot/efi|/var/tmp|/run.*\"}",
+     "expr": "node_filesystem_avail_bytes{instance=~\"$instance\",mountpoint!~\"/boot/efi|/var/tmp|/run.*\",instance!~\"[0-9.]+:[0-9]+\"}",
      "legendFormat": "{{instance}} {{mountpoint}}",
      "range": true,
      "refId": "A"
@@ -1349,7 +1349,7 @@
       "type": "prometheus",
       "uid": "${DS_PROMETHEUS}"
      },
-     "expr": "node_hwmon_temp_celsius{instance=~\"$instance\"}",
+     "expr": "node_hwmon_temp_celsius{instance=~\"$instance\",instance!~\"[0-9.]+:[0-9]+\"}",
      "legendFormat": "{{instance}} {{chip}} {{sensor}}",
      "range": true,
      "refId": "A"
@@ -1359,7 +1359,7 @@
       "type": "prometheus",
       "uid": "${DS_PROMETHEUS}"
      },
-     "expr": "node_thermal_zone_temp_celsius{instance=~\"$instance\"}",
+     "expr": "node_thermal_zone_temp_celsius{instance=~\"$instance\",instance!~\"[0-9.]+:[0-9]+\"}",
      "legendFormat": "{{instance}} {{type}}",
      "range": true,
      "refId": "B"
@@ -1482,7 +1482,7 @@
       "type": "prometheus",
       "uid": "${DS_PROMETHEUS}"
      },
-     "expr": "node_filesystem_used_percent{instance=~\"$instance\"} > 60",
+     "expr": "node_filesystem_used_percent{instance=~\"$instance\",instance!~\"[0-9.]+:[0-9]+\"} > 60",
      "format": "table",
      "instant": true,
      "legendFormat": "使用率",
@@ -1648,7 +1648,7 @@
       "type": "prometheus",
       "uid": "${DS_PROMETHEUS}"
      },
-     "expr": "node_disk_smart_health",
+     "expr": "node_disk_smart_health{instance!~\"[0-9.]+:[0-9]+\"}",
      "format": "table",
      "instant": true,
      "legendFormat": "健康",
@@ -1660,7 +1660,7 @@
       "type": "prometheus",
       "uid": "${DS_PROMETHEUS}"
      },
-     "expr": "node_disk_smart_temperature_celsius",
+     "expr": "node_disk_smart_temperature_celsius{instance!~\"[0-9.]+:[0-9]+\"}",
      "format": "table",
      "instant": true,
      "legendFormat": "温度",
@@ -1672,7 +1672,7 @@
       "type": "prometheus",
       "uid": "${DS_PROMETHEUS}"
      },
-     "expr": "node_disk_smart_current_pending_sectors_total",
+     "expr": "node_disk_smart_current_pending_sectors_total{instance!~\"[0-9.]+:[0-9]+\"}",
      "format": "table",
      "instant": true,
      "legendFormat": "待映射扇区",
@@ -1684,7 +1684,7 @@
       "type": "prometheus",
       "uid": "${DS_PROMETHEUS}"
      },
-     "expr": "node_disk_smart_power_on_hours_total",
+     "expr": "node_disk_smart_power_on_hours_total{instance!~\"[0-9.]+:[0-9]+\"}",
      "format": "table",
      "instant": true,
      "legendFormat": "通电小时",
@@ -1850,5 +1850,5 @@
  "timezone": "browser",
  "title": "机群主机监控",
  "uid": "host-monitor",
- "version": 7
+ "version": 8
 }

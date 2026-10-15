@@ -365,19 +365,19 @@ smart/                 可选模块（默认关闭）
 | --- | --- | --- | --- |
 | 1 | 在线主机 | stat | `count(up{job="node_exporter"})` |
 | 2 | 离线目标 | stat | `sum(up{job=~"node_exporter\|zfs_exporter\|lxc_exporter\|bird_exporter\|portfwd_exporter"} == 0) or vector(0)` |
-| 3 | 失败的服务单元 | stat | `sum(node_systemd_units_failed{instance=~"$instance"})` |
+| 3 | 失败的服务单元 | stat | `sum(node_systemd_units_failed{instance=~"$instance",instance!~"[0-9.]+:[0-9]+"})` |
 | 4 | 采集目标状态 | table | `up{job=~"node_exporter\|zfs_exporter\|lxc_exporter\|bird_exporter\|portfwd_exporter"}` |
-| 5 | 系统负载（1 分钟） | timeseries | `node_load1{instance=~"$instance"}` |
-| 15 | 每核负载（1 / 5 / 15 分钟） | timeseries | `node_load_per_core_ratio{interval="1m",instance=~"$instance"}<br>node_load_per_core_ratio{interval="5m",instance=~"$instance"}<br>node_load_per_core_ratio{interval="15m",instance=~"$instance"}` |
-| 6 | CPU 使用率 | timeseries | `(1 - avg by (instance) (rate(node_cpu_seconds_total{cpu!="total",mode="idle",instance=~"$instance"}[$__rate_interval]))) * 100` |
-| 7 | 内存使用率 | timeseries | `node_memory_used_percent{instance=~"$instance"}` |
-| 8 | 内存明细 | timeseries | `node_memory_used_bytes{instance=~"$instance"}<br>node_memory_cached_bytes{instance=~"$instance"}<br>node_memory_buffers_bytes{instance=~"$instance"}` |
-| 9 | 磁盘使用率 > 60% | table | `node_filesystem_used_percent{instance=~"$instance"} > 60` |
-| 10 | 磁盘可用空间 | timeseries | `node_filesystem_avail_bytes{instance=~"$instance",mountpoint!~"/boot/efi\|/var/tmp\|/run.*"}` |
-| 11 | 网卡流量 | timeseries | `sum by (instance) (rate(node_network_receive_bytes_total{instance=~"$instance"}[$__rate_interval]))<br>sum by (instance) (rate(node_network_transmit_bytes_total{instance=~"$instance"}[$__rate_interval]))` |
-| 12 | 温度 | timeseries | `node_hwmon_temp_celsius{instance=~"$instance"}<br>node_thermal_zone_temp_celsius{instance=~"$instance"}` |
-| 13 | 失败的服务单元明细 | table | `node_systemd_unit_state{state="failed",instance=~"$instance"} == 1` |
-| 14 | 硬盘 SMART | table | `node_disk_smart_health<br>node_disk_smart_temperature_celsius<br>node_disk_smart_current_pending_sectors_total<br>node_disk_smart_power_on_hours_total` |
+| 5 | 系统负载（1 分钟） | timeseries | `node_load1{instance=~"$instance",instance!~"[0-9.]+:[0-9]+"}` |
+| 6 | CPU 使用率 | timeseries | `(1 - avg by (instance) (rate(node_cpu_seconds_total{cpu!="total",mode="idle",instance=~"$instance",instance!~"[0-9.]+:[0-9]+"}[$__rate_interval]))) * 100` |
+| 7 | 内存使用率 | timeseries | `node_memory_used_percent{instance=~"$instance",instance!~"[0-9.]+:[0-9]+"}` |
+| 11 | 网卡流量 | timeseries | `sum by (instance) (rate(node_network_receive_bytes_total{instance=~"$instance",instance!~"[0-9.]+:[0-9]+"}[$__rate_interval]))<br>sum by (instance) (rate(node_network_transmit_bytes_total{instance=~"$instance",instance!~"[0-9.]+:[0-9]+"}[$__rate_interval]))` |
+| 13 | 失败的服务单元明细 | table | `node_systemd_unit_state{state="failed",instance=~"$instance",instance!~"[0-9.]+:[0-9]+"} == 1` |
+| 8 | 内存明细 | timeseries | `node_memory_used_bytes{instance=~"$instance",instance!~"[0-9.]+:[0-9]+"}<br>node_memory_cached_bytes{instance=~"$instance",instance!~"[0-9.]+:[0-9]+"}<br>node_memory_buffers_bytes{instance=~"$instance",instance!~"[0-9.]+:[0-9]+"}` |
+| 15 | 每核负载（1 / 5 / 15 分钟） | timeseries | `node_load_per_core_ratio{interval="1m",instance=~"$instance",instance!~"[0-9.]+:[0-9]+"}<br>node_load_per_core_ratio{interval="5m",instance=~"$instance",instance!~"[0-9.]+:[0-9]+"}<br>node_load_per_core_ratio{interval="15m",instance=~"$instance",instance!~"[0-9.]+:[0-9]+"}` |
+| 10 | 磁盘可用空间 | timeseries | `node_filesystem_avail_bytes{instance=~"$instance",mountpoint!~"/boot/efi\|/var/tmp\|/run.*",instance!~"[0-9.]+:[0-9]+"}` |
+| 12 | 温度 | timeseries | `node_hwmon_temp_celsius{instance=~"$instance",instance!~"[0-9.]+:[0-9]+"}<br>node_thermal_zone_temp_celsius{instance=~"$instance",instance!~"[0-9.]+:[0-9]+"}` |
+| 9 | 磁盘使用率 > 60% | table | `node_filesystem_used_percent{instance=~"$instance",instance!~"[0-9.]+:[0-9]+"} > 60` |
+| 14 | 硬盘 SMART | table | `node_disk_smart_health{instance!~"[0-9.]+:[0-9]+"}<br>node_disk_smart_temperature_celsius{instance!~"[0-9.]+:[0-9]+"}<br>node_disk_smart_current_pending_sectors_total{instance!~"[0-9.]+:[0-9]+"}<br>node_disk_smart_power_on_hours_total{instance!~"[0-9.]+:[0-9]+"}` |
 
 变量：DS_PROMETHEUS、instance。
 
