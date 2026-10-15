@@ -2,6 +2,8 @@
 Description=node_exporter - Prometheus 主机指标采集器
 Documentation=file:/usr/share/doc/node_exporter/README.md
 After=network-online.target
+StartLimitIntervalSec=60
+StartLimitBurst=3
 Wants=network-online.target
 
 [Service]
@@ -14,8 +16,6 @@ ExecStart=/usr/local/bin/node_exporter -config /etc/node_exporter/config.json
 ExecReload=/bin/kill -HUP $MAINPID
 Restart=always
 RestartSec=5
-StartLimitIntervalSec=60
-StartLimitBurst=3
 
 # S.M.A.R.T. 需要读取 /dev/sd*。
 # 如需开启该模块，把下面的 User 改为 root，或配置 udev 规则后保持普通用户。
