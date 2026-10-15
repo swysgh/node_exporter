@@ -7,19 +7,9 @@ Wants=network-online.target
 [Service]
 Type=simple
 
-# 默认：CPU/内存/swap/负载/温度/网卡流量/systemd/文件系统 + go_*/process_*
-# 按需追加 -enable-smart 开启 SMART 模块。
-ExecStart=/usr/local/bin/node_exporter \
-  -web.listen-address=:9100 \
-  -enable-system \
-  -enable-systemd \
-  -enable-filesystem \
-  -enable-network \
-  -systemd.include='^(ssh|cron|docker|containerd|nginx)' \
-  -network.exclude='^(lo|veth.*|docker.*|br-.*|virbr.*)$'
-
-# S.M.A.R.T. 完整示例（把 -enable-smart 加到上面的 ExecStart 即可）：
-#   -enable-smart -smart.device=/dev/sda,/dev/sdb
+# 所有可调项都放在 /etc/node_exporter/config.json（字段见仓库 config.example.json），
+# 命令行 flag 优先级更高，排查时可临时追加（如 -enable-smart -smart.device=/dev/sda）。
+ExecStart=/usr/local/bin/node_exporter -config /etc/node_exporter/config.json
 
 ExecReload=/bin/kill -HUP $MAINPID
 Restart=always
