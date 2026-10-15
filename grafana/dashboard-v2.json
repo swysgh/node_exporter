@@ -343,7 +343,9 @@
          "spec": {
           "options": {
            "excludeByName": {
-            "Time": true
+            "Time": true,
+            "__name__": true,
+            "exported_instance": true
            },
            "renameByName": {
             "instance": "主机",
@@ -393,9 +395,8 @@
            "type": "auto"
           },
           "footer": {
-           "reducers": [
-            "sum"
-           ]
+           "show": false,
+           "reducers": []
           },
           "inspect": false
          }
@@ -740,7 +741,7 @@
     "spec": {
      "id": 6,
      "title": "CPU 使用率",
-     "description": "",
+     "description": "按核平均的空闲率反推（cpu=\"total\" 是全核之和，直接 rate 会大于 1）。",
      "links": [],
      "data": {
       "kind": "QueryGroup",
@@ -758,7 +759,7 @@
            },
            "spec": {
             "editorMode": "code",
-            "expr": "(1 - rate(node_cpu_seconds_total{cpu=\"total\",mode=\"idle\",instance=~\"$instance\"}[$__rate_interval])) * 100",
+            "expr": "(1 - avg by (instance) (rate(node_cpu_seconds_total{cpu!=\"total\",mode=\"idle\",instance=~\"$instance\"}[$__rate_interval]))) * 100",
             "legendFormat": "{{instance}}",
             "range": true
            }
@@ -1180,7 +1181,9 @@
          "spec": {
           "options": {
            "excludeByName": {
-            "Time": true
+            "Time": true,
+            "__name__": true,
+            "exported_instance": true
            },
            "renameByName": {
             "instance": "主机",
@@ -1232,9 +1235,8 @@
            "type": "auto"
           },
           "footer": {
-           "reducers": [
-            "sum"
-           ]
+           "show": false,
+           "reducers": []
           },
           "inspect": false
          }
@@ -1752,6 +1754,7 @@
           "options": {
            "excludeByName": {
             "Time": true,
+            "__name__": true,
             "job": true,
             "state": true,
             "exported_instance": true
@@ -1804,9 +1807,8 @@
            "type": "auto"
           },
           "footer": {
-           "reducers": [
-            "sum"
-           ]
+           "show": false,
+           "reducers": []
           },
           "inspect": false
          }
@@ -1982,6 +1984,7 @@
           "options": {
            "excludeByName": {
             "Time": true,
+            "__name__": true,
             "job": true,
             "instance": true,
             "exported_instance": true,
@@ -2038,9 +2041,8 @@
            "type": "auto"
           },
           "footer": {
-           "reducers": [
-            "sum"
-           ]
+           "show": false,
+           "reducers": []
           },
           "inspect": false
          }
