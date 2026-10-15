@@ -1,0 +1,38 @@
+{
+  "listen_address": ":9100",
+  "telemetry_path": "/metrics",
+  "auth_token": "",
+  "proc_root": "/proc",
+  "sys_root": "/sys",
+  "hostname": "",
+  "command_timeout": "20s",
+
+  "enable_system": true,
+  "enable_cpu": true,
+  "enable_mem": true,
+  "enable_temp": true,
+  "enable_systemd": true,
+  "enable_network": true,
+  "enable_smart": false,
+  "enable_filesystem": true,
+  "enable_runtime": true,
+
+  "systemd_include": "",
+  "systemd_exclude": "",
+  "systemd_types": "service",
+  "systemd_detail": true,
+
+  "network_include": "",
+  "network_exclude": "^(lo|veth.*|docker[0-9]*|br-.*|virbr.*|tun[0-9]*|tap[0-9]*|zt.*|sit.*|erspan.*|gre.*|ip6tnl.*|wg[0-9]*)$",
+
+  "smart_path": "smartctl",
+  "smart_device": "",
+  "smart_exclude": "^/dev/(zram|loop|sr|fd|dm-|md|nbd|zram)",
+  "smart_parallel": 4,
+  "smart_standby": true,
+
+  "filesystem_include": "",
+  "filesystem_exclude": "",
+  "filesystem_fstype_exclude": "^(tmpfs|devtmpfs|devpts|overlay|squashfs|ramfs|proc|sysfs|cgroup2?|securityfs|debugfs|tracefs|pstore|bpf|configfs|fusectl|mqueue|hugetlbfs|nsfs|efivarfs|autofs|fuse\\.lxcfs|fuse\\.gvfsd-fuse)$",
+  "filesystem_mounts_path": "/proc/mounts"
+}

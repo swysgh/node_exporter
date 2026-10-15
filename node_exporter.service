@@ -1,0 +1,52 @@
+[Unit]
+Description=node_exporter - Prometheus 主机指标采集器
+Documentation=file:/usr/share/doc/node_exporter/README.md
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+
+# 默认：CPU/内存/swap/负载/温度/网卡流量/systemd/文件系统 + go_*/process_*
+# 按需追加 -enable-smart 开启 SMART 模块。
+ExecStart=/usr/local/bin/node_exporter \
+  -web.listen-address=:9100 \
+  -enable-system \
+  -enable-systemd \
+  -enable-filesystem \
+  -enable-network \
+  -systemd.include='^(ssh|cron|docker|containerd|nginx)' \
+  -network.exclude='^(lo|veth.*|docker.*|br-.*|virbr.*)$'
+
+# S.M.A.R.T. 完整示例（把 -enable-smart 加到上面的 ExecStart 即可）：
+#   -enable-smart -smart.device=/dev/sda,/dev/sdb
+
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=always
+RestartSec=5
+StartLimitIntervalSec=60
+StartLimitBurst=3
+
+# S.M.A.R.T. 需要读取 /dev/sd*。
+# 如需开启该模块，把下面的 User 改为 root，或配置 udev 规则后保持普通用户。
+User=root
+Group=root
+
+# 安全加固
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+PrivateDevices=no          # 采集 S.M.A.R.T. 需要访问真实块设备
+ProtectKernelTunables=yes
+ProtectControlGroups=yes
+RestrictSUIDSGID=yes
+RestrictRealtime=yes
+LockPersonality=yes
+
+# 采集 smartctl/systemctl 都要能执行外部命令，
+# 因此不能使用 RestrictAddressFamilies 之外的过度限制，这里只放开网络族。
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+
+[Install]
+WantedBy=multi-user.target
