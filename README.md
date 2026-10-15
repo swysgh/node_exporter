@@ -369,7 +369,7 @@ smart/                 可选模块（默认关闭）
 | 4 | 采集目标状态 | table | `up{job=~"node_exporter\|zfs_exporter\|lxc_exporter\|bird_exporter\|portfwd_exporter"}` |
 | 5 | 系统负载（1 分钟） | timeseries | `node_load1{instance=~"$instance"}` |
 | 15 | 每核负载（1 / 5 / 15 分钟） | timeseries | `node_load_per_core_ratio{interval="1m",instance=~"$instance"}<br>node_load_per_core_ratio{interval="5m",instance=~"$instance"}<br>node_load_per_core_ratio{interval="15m",instance=~"$instance"}` |
-| 6 | CPU 使用率 | timeseries | `(1 - rate(node_cpu_seconds_total{cpu="total",mode="idle",instance=~"$instance"}[$__rate_interval])) * 100` |
+| 6 | CPU 使用率 | timeseries | `(1 - avg by (instance) (rate(node_cpu_seconds_total{cpu!="total",mode="idle",instance=~"$instance"}[$__rate_interval]))) * 100` |
 | 7 | 内存使用率 | timeseries | `node_memory_used_percent{instance=~"$instance"}` |
 | 8 | 内存明细 | timeseries | `node_memory_used_bytes{instance=~"$instance"}<br>node_memory_cached_bytes{instance=~"$instance"}<br>node_memory_buffers_bytes{instance=~"$instance"}` |
 | 9 | 磁盘使用率 > 60% | table | `node_filesystem_used_percent{instance=~"$instance"} > 60` |
@@ -380,3 +380,5 @@ smart/                 可选模块（默认关闭）
 | 14 | 硬盘 SMART | table | `node_disk_smart_health<br>node_disk_smart_temperature_celsius<br>node_disk_smart_current_pending_sectors_total<br>node_disk_smart_power_on_hours_total` |
 
 变量：DS_PROMETHEUS、instance。
+
+表格面板的变换流水线固定为 `labelsToFields → merge → groupBy → organize`（多查询表格必须有 `groupBy`）：各查询是 instant 求值、时间戳各不相同，`merge` 无法按时间把行对齐，会把每个查询的结果摞成独立行块（表现是「进程数」「温度」这类列整块错位、同一维度出现多行）；`groupBy` 按标签列分组、对 `Value #X` 取 `lastNotNull` 才能合并成一行一个维度。分组键要每个查询都存在，且涵盖所有要保留显示的标签列（`groupBy` 会丢掉没列进 `fields` 的字段）。

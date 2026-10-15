@@ -1295,6 +1295,49 @@
           "options": {}
         },
         {
+          "id": "groupBy",
+          "options": {
+            "fields": {
+              "instance": {
+                "operation": "groupby",
+                "aggregations": []
+              },
+              "device": {
+                "operation": "groupby",
+                "aggregations": []
+              },
+              "model": {
+                "operation": "groupby",
+                "aggregations": []
+              },
+              "Value #A": {
+                "operation": "aggregate",
+                "aggregations": [
+                  "lastNotNull"
+                ]
+              },
+              "Value #B": {
+                "operation": "aggregate",
+                "aggregations": [
+                  "lastNotNull"
+                ]
+              },
+              "Value #C": {
+                "operation": "aggregate",
+                "aggregations": [
+                  "lastNotNull"
+                ]
+              },
+              "Value #D": {
+                "operation": "aggregate",
+                "aggregations": [
+                  "lastNotNull"
+                ]
+              }
+            }
+          }
+        },
+        {
           "id": "organize",
           "options": {
             "excludeByName": {
@@ -1311,7 +1354,11 @@
               "Value #A": "健康",
               "Value #B": "温度",
               "Value #C": "待映射扇区",
-              "Value #D": "通电小时"
+              "Value #D": "通电小时",
+              "Value #A (lastNotNull)": "健康",
+              "Value #B (lastNotNull)": "温度",
+              "Value #C (lastNotNull)": "待映射扇区",
+              "Value #D (lastNotNull)": "通电小时"
             }
           }
         }
