@@ -364,9 +364,9 @@ smart/                 可选模块（默认关闭）
 | # | 面板 | 类型 | PromQL |
 | --- | --- | --- | --- |
 | 1 | 在线主机 | stat | `count(up{job="node_exporter"})` |
-| 2 | 离线目标 | stat | `sum(up{job=~"node_exporter\|zfs_exporter\|lxc_exporter\|bird_exporter\|portfwd_exporter"} == 0) or vector(0)` |
+| 2 | 离线目标 | stat | `sum(up{job=~"node_exporter\|zfs_exporter\|lxc_exporter\|bird_exporter\|portfwd_exporter\|flapalerted\|flapalerted_peers"} == 0) or vector(0)` |
 | 3 | 失败的服务单元 | stat | `sum(node_systemd_units_failed{instance=~"$instance",instance!~"[0-9.]+:[0-9]+"})` |
-| 4 | 采集目标状态 | table | `up{job=~"node_exporter\|zfs_exporter\|lxc_exporter\|bird_exporter\|portfwd_exporter"}` |
+| 4 | 采集目标状态 | table | `up{job=~"node_exporter\|zfs_exporter\|lxc_exporter\|bird_exporter\|portfwd_exporter\|flapalerted\|flapalerted_peers"}` |
 | 5 | 系统负载（1 分钟） | timeseries | `node_load1{instance=~"$instance",instance!~"[0-9.]+:[0-9]+"}` |
 | 6 | CPU 使用率 | timeseries | `(1 - avg by (instance) (rate(node_cpu_seconds_total{cpu!="total",mode="idle",instance=~"$instance",instance!~"[0-9.]+:[0-9]+"}[$__rate_interval]))) * 100` |
 | 7 | 内存使用率 | timeseries | `node_memory_used_percent{instance=~"$instance",instance!~"[0-9.]+:[0-9]+"}` |

@@ -1147,7 +1147,7 @@
             "name": "${DS_PROMETHEUS}"
            },
            "spec": {
-            "expr": "sum(up{job=~\"node_exporter|zfs_exporter|lxc_exporter|bird_exporter|portfwd_exporter\"} == 0) or vector(0)",
+            "expr": "sum(up{job=~\"node_exporter|zfs_exporter|lxc_exporter|bird_exporter|portfwd_exporter|flapalerted|flapalerted_peers\"} == 0) or vector(0)",
             "instant": true,
             "legendFormat": "离线目标",
             "range": false
@@ -1311,7 +1311,7 @@
             "name": "${DS_PROMETHEUS}"
            },
            "spec": {
-            "expr": "up{job=~\"node_exporter|zfs_exporter|lxc_exporter|bird_exporter|portfwd_exporter\"}",
+            "expr": "up{job=~\"node_exporter|zfs_exporter|lxc_exporter|bird_exporter|portfwd_exporter|flapalerted|flapalerted_peers\"}",
             "format": "table",
             "instant": true,
             "legendFormat": "状态",
