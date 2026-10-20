@@ -382,3 +382,7 @@ smart/                 可选模块（默认关闭）
 变量：DS_PROMETHEUS、instance。
 
 表格面板的变换流水线固定为 `labelsToFields → merge → groupBy → organize`（多查询表格必须有 `groupBy`）：各查询是 instant 求值、时间戳各不相同，`merge` 无法按时间把行对齐，会把每个查询的结果摞成独立行块（表现是「进程数」「温度」这类列整块错位、同一维度出现多行）；`groupBy` 按标签列分组、对 `Value #X` 取 `lastNotNull` 才能合并成一行一个维度。分组键要每个查询都存在，且涵盖所有要保留显示的标签列（`groupBy` 会丢掉没列进 `fields` 的字段）。
+
+## 许可
+
+[Apache License 2.0](LICENSE) · Copyright 2026 swysgh
